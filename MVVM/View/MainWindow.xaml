@@ -1,0 +1,188 @@
+﻿<Window x:Class="Paint.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Paint"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:viewModel="clr-namespace:Paint.MVVM.ViewModel"
+        xmlns:uc="clr-namespace:Paint.MVVM.View"
+        mc:Ignorable="d"
+        Height="600" Width="920"
+        WindowStyle="None"
+        ResizeMode="CanResizeWithGrip"
+        Background="Transparent"
+        AllowsTransparency="True"
+        WindowStartupLocation="CenterScreen">
+    <Window.DataContext>
+        <viewModel:ApplicationViewModel/>
+    </Window.DataContext>
+    <Window.Resources>
+        <ResourceDictionary Source="/Themes/Fonts.xaml"/>
+    </Window.Resources>
+
+    <Border Background="{StaticResource background}" 
+            CornerRadius="10">
+        <Grid>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Border  Grid.ColumnSpan="3" 
+                    
+                        Background="{StaticResource accent}"
+                        CornerRadius="10 10 0 0"
+                        >
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseDown">
+                        <i:InvokeCommandAction
+                            Command="{Binding MoveWindow}"
+                            CommandParameter="{Binding}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <DockPanel>
+                    <TextBlock Text="Paintye"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"
+                               Foreground="{StaticResource primary}"
+                               FontSize="22"
+                               Margin="20, 0, 0, 0"/>
+                    <Image Source="/Sourse/Images/visible-512.png"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"
+                           Height="30"
+                           Margin="2, 0, 0, 0"/>
+                    <StackPanel HorizontalAlignment="Right"
+                                Orientation="Horizontal">
+                        <Button Height="40"
+                                FontSize="30"
+                                FontWeight="Bold"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Content="−"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Foreground="{StaticResource primary }" Width="40"
+                                Command="{Binding WindowMin}"/>
+                        <Button Height="40"
+                                FontSize="30"
+                                FontWeight="Bold"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Content="◻"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Foreground="{StaticResource primary }" Width="40"
+                                Command="{Binding WindowMax}"/>
+                        <Button Height="40"
+                                FontSize="20"
+                                Margin="0 0 10 0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Content="❌"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Foreground="{StaticResource primary }" Width="40"
+                                Command="{Binding CloseWindow}"/>
+                    </StackPanel>
+                </DockPanel>
+
+            </Border>
+            <Grid Row="1" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.25*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="0.25*"/>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="1">
+
+                  <uc:DrawingSpace>
+
+                  </uc:DrawingSpace>
+
+                    <TextBlock Foreground="Gray" 
+                                   Width="40px"
+                                   Height="30px"
+                                   Text="{Binding ScaleFactor, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+
+
+                </Grid>
+                <Grid >
+                    <Border Background="{StaticResource secondary}" 
+                            CornerRadius="0 0 0 10">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+
+                            <Grid>   
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="0.25*"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Border Background="{StaticResource primary}">
+                                    <Label Grid.Row="0" 
+                                               Content="Brushes"
+                                               FontSize="14"
+                                               Foreground="{StaticResource text}"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                    />
+                                </Border>
+                                <ListBox Grid.Row="1"
+                                         Margin="10">
+
+                                </ListBox>
+                            </Grid>
+
+                            <Grid Row="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="0.25*"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Border Background="{StaticResource primary}">
+                                    <Label Grid.Row="0" 
+                                           Content="Brush settings"
+                                           FontSize="14"
+                                           Foreground="{StaticResource text}"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                    />
+                                </Border>
+                            </Grid>
+                            <Grid Row="2">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="0.25*"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Border Background="{StaticResource primary}">
+                                    <Label Grid.Row="0" 
+                                           Content="Color"
+                                           FontSize="14"
+                                           Foreground="{StaticResource text}"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                    />
+                                </Border>
+
+                            </Grid>
+
+                        </Grid>
+
+                    </Border>
+
+                </Grid>
+                <Grid Column="2" >
+                    <Border Background="{StaticResource secondary}" 
+                            CornerRadius="0 0 10 0">
+                    </Border>
+                </Grid>
+
+            </Grid>
+        </Grid>
+    </Border>
+</Window>
