@@ -12,19 +12,26 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Paint.MVVM.Model;
 
 namespace Paint.MVVM.View
 {
     /// <summary>
-    /// Interaction logic for DrawingSpace.xaml
+    /// Interaction logic for DrawCanvas.xaml
     /// </summary>
-    public partial class DrawingSpace : UserControl
+    public partial class DrawCanvas : UserControl
     {
-        public DrawingSpace()
+        private InkCanvas _ThisCanvas;
+
+        public InkCanvas ThisCanvas
+        {
+            get { return _ThisCanvas; }
+            set { _ThisCanvas = value; }
+        }
+
+        public DrawCanvas()
         {
             InitializeComponent();
-            new DrawingArea().Bind(MyGrid);
+            
         }
     }
 }
