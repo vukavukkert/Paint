@@ -21,6 +21,7 @@ namespace Paint.MVVM.Model
 {
     public class DrawingArea : ObservableObject
     {
+        private Border border;
         private double zoom = 0;
         private Color _currentColor = new Color()
         {
@@ -106,6 +107,9 @@ namespace Paint.MVVM.Model
 
             transform.ScaleX += zoom;
             transform.ScaleY += zoom;
+            if (transform.ScaleX < 0.2) transform.ScaleX = 0.2;
+            if (transform.ScaleY < 0.2) transform.ScaleY = 0.2;
+
         }
 
         private void SpacePressed(object sender, KeyEventArgs e)
@@ -243,15 +247,16 @@ namespace Paint.MVVM.Model
         {
 
             Stroke.Position = e.GetPosition(DrawCanvas);
+            Container.Children.Remove(border);
 
-            var border = new Border()
+            border = new Border()
             {
                 BorderBrush = new SolidColorBrush(Color.Multiply(CurrentColor, 100)),
                 BorderThickness = new Thickness(1),
                 CornerRadius = new CornerRadius(100),
-                Width = Stroke.Width * Stroke.Size + zoom,
-                Height = Stroke.Height * Stroke.Size + zoom,
-                RenderTransformOrigin = new Point(0.5,0.5)
+                Width = Stroke.Width * Stroke.Size ,
+                Height = Stroke.Height * Stroke.Size,
+                RenderTransformOrigin = new Point(0,0)
 
             };
 
@@ -265,8 +270,9 @@ namespace Paint.MVVM.Model
             border.RenderTransform = transformGroup;
             Container.Children.Add(border);
 
-            translateTransform.X = Stroke.Position.X;
-            translateTransform.Y = Stroke.Position.Y;
+            translateTransform.X = e.GetPosition(Container).X - (Container.ActualWidth / 2);
+            translateTransform.Y = e.GetPosition(Container).Y - (Container.ActualHeight / 2);
+
 
         }
 

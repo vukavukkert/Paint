@@ -1,19 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Ink;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Navigation;
 using Paint.Core;
 using Paint.MVVM.Model;
-using Syncfusion.Windows.Shared;
+using Paint.MVVM.View;
 using Pen = Paint.MVVM.Model.Pen;
 
 namespace Paint.MVVM.ViewModel
@@ -156,18 +150,28 @@ namespace Paint.MVVM.ViewModel
 
         #endregion
         #region New File
-
         private RelayCommand _newFile;
-
         public RelayCommand NewFile
         {
             get => _newFile ?? (_newFile = new RelayCommand(o =>
             {
-                CurrentDrawingArea.NewFile(300, 200);
-            }));
-        }
+                var window = new CreateNewFile();
+                window.Show();
 
+                void CreateFile (object sender, EventArgs args)
+                {
+                    int width = int.Parse(window.WidthBox.Text);
+                    int height = int.Parse(window.HeightBox.Text);
+                    CurrentDrawingArea.NewFile(width,height);
+                    window.Close();
+                    window.CreateButton.Click -= CreateFile;
+                };
+                window.CreateButton.Click += CreateFile;
+
+            }));
+            }
         #endregion
+
         private ObservableCollection<Pen> _pens = new ObservableCollection<Pen>()
         {
             new Pen()
@@ -195,7 +199,6 @@ namespace Paint.MVVM.ViewModel
             }
         };
 
-        
         public ObservableCollection<Pen> Pens
         {
             get { return _pens; }
