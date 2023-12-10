@@ -169,9 +169,34 @@ namespace Paint.MVVM.ViewModel
                 window.CreateButton.Click += CreateFile;
 
             }));
-            }
+        }
         #endregion
+        #region Undo Stroke
 
+        private RelayCommand _undoStroke;       
+
+        public RelayCommand UndoStroke
+        {
+            get => _undoStroke ?? (_undoStroke = new RelayCommand(o =>
+            {
+                CurrentDrawingArea.Undo();
+            }));
+        }
+
+        #endregion
+        #region Redo Stroke
+
+        private RelayCommand _redoStroke;
+
+        public RelayCommand RedoStroke
+        {
+            get => _redoStroke ?? (_redoStroke = new RelayCommand(o =>
+            {
+                CurrentDrawingArea.Redo();
+            }));
+        }
+
+        #endregion
         private ObservableCollection<Pen> _pens = new ObservableCollection<Pen>()
         {
             new Pen()

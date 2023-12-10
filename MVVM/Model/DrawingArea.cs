@@ -19,8 +19,17 @@ using System.Windows.Shapes;
 
 namespace Paint.MVVM.Model
 {
+    public struct DoStroke
+    {
+        public string ActionFlag { get; set; }
+        public System.Windows.Ink.Stroke Stroke { get; set; }
+    }
     public class DrawingArea : ObservableObject
     {
+        public Stack<DoStroke> DoStrokes { get; set; }
+        public Stack<DoStroke> UndoStrokes { get; set; }
+
+        private bool handle = true;
         private Border border;
         private double zoom = 0;
         private Color _currentColor = new Color()
@@ -222,6 +231,8 @@ namespace Paint.MVVM.Model
         }
         public void SetUpCanvas(InkCanvas canvas)
         {
+            DoStrokes = new Stack<DoStroke>();
+            UndoStrokes = new Stack<DoStroke>();
             TransformGroup transformGroup = new TransformGroup();
             ScaleTransform scaleTransform = new ScaleTransform();
             TranslateTransform translateTransform = new TranslateTransform();
@@ -234,15 +245,81 @@ namespace Paint.MVVM.Model
             Mouse.OverrideCursor = Cursors.Cross;
             canvas.Loaded += (sender, e) => { canvas.Focus(); };
 
-
+            canvas.KeyDown += delegate(object sender, KeyEventArgs args)
+            {
+                if (args.Key == Key.Z)
+                {
+                    Undo();
+                }
+                if (args.Key == Key.X)
+                {
+                    Redo();
+                }
+                if (args.Key == Key.D)
+                {
+                    ClearCanvas();
+                }
+            };
             canvas.MouseWheel += ZoomIn;
             canvas.KeyDown += SpacePressed;
             canvas.KeyUp += SpacePressed;
             canvas.MouseMove += DisplayBrushOverlay;
+            canvas.Strokes.StrokesChanged += Strokes_StrokesChanged;
 
             FocusManager.SetIsFocusScope(canvas, true);
         }
 
+        private void Strokes_StrokesChanged(object sender, System.Windows.Ink.StrokeCollectionChangedEventArgs e)
+        {
+            if (handle)
+            {
+                DoStrokes.Push( new DoStroke
+                {
+                    ActionFlag = e.Added.Count > 0 ? "ADD" : "REMOVE",
+                    Stroke = e.Added.Count > 0 ? e.Added[0] : e.Removed[0]
+                });
+            }
+        }
+
+        public void Undo()
+        {
+            handle = false;
+            if (DoStrokes.Count > 0)
+            {
+                DoStroke @do = DoStrokes.Pop();
+                if (@do.ActionFlag.Equals("ADD"))
+                {
+                    DrawCanvas.Strokes.Remove(@do.Stroke);
+                }
+                else
+                {
+                    DrawCanvas.Strokes.Add(@do.Stroke);
+                }
+                UndoStrokes.Push(@do);
+            }
+            handle = true;
+        }
+
+        public void Redo()
+        {
+            handle = false;
+            if (UndoStrokes.Count > 0)
+            {
+                DoStroke @do = UndoStrokes.Pop();
+                if (@do.ActionFlag.Equals("ADD"))
+                {
+                    DrawCanvas.Strokes.Add(@do.Stroke);
+                    
+                }
+                else
+                {
+                    DrawCanvas.Strokes.Remove(@do.Stroke);
+                   
+                }
+                DoStrokes.Push(@do);
+            }
+            handle = true;
+        }
         private void DisplayBrushOverlay(object sender, MouseEventArgs e)
         {
 

@@ -100,23 +100,36 @@
                     <MenuItem Header="Exit" Command="{Binding CloseWindow}"/>
                 </MenuItem>
                 <MenuItem Header="Edit">
-                    <MenuItem Header="Undo"/>
-                    <MenuItem Header="Redo"/>
+                    <MenuItem Header="Undo" Command="{Binding UndoStroke}"/>
+                    <MenuItem Header="Redo" Command="{Binding RedoStroke}"/>
                     <MenuItem Header="Clear canvas" Command="{Binding ClearCanvas}"/>
-                    <Separator/>
-                    <MenuItem Header="Shortcuts (ReadOnly)"/>
                 </MenuItem>
             </Menu>
             <Grid Row="2" >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.60*"/>
                     <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="0.25*"/>
                 </Grid.ColumnDefinitions>
                 <Grid Grid.Column="1">
+
                     <ContentControl Content="{Binding ContainerGrid, UpdateSourceTrigger=PropertyChanged}">
                         
                     </ContentControl>
+                    <DockPanel VerticalAlignment="Bottom" HorizontalAlignment="Right">
+                        <StackPanel>
+                            <TextBlock Text="Z - undo"/>
+                            <TextBlock Text="X - redo"/>
+                            <TextBlock Text="D - clear canvas"/>
+                            <TextBlock Text="Space - move canvas"/>
+                            <TextBlock Text="Mouse wheel - zoom"/>
+                        </StackPanel>
+                    </DockPanel>
+                    <DockPanel VerticalAlignment="Bottom">
+                        <StackPanel>
+                            <TextBlock Text="{Binding CurrentPen.Position.X}"/>
+                            <TextBlock Text="{Binding CurrentPen.Position.Y}"/>
+                        </StackPanel>
+                    </DockPanel>
                 </Grid>
                 <Grid >
                     <Border Background="{StaticResource secondary}" 
@@ -361,16 +374,6 @@
                     </Border>
 
                 </Grid>
-                <Grid Column="2" >
-                    <Border Background="{StaticResource secondary}" 
-                            CornerRadius="0 0 10 0">
-                        <StackPanel>
-                            <TextBlock Text="{Binding CurrentPen.Position.X}"/>
-                            <TextBlock Text="{Binding CurrentPen.Position.Y}"/>
-                        </StackPanel>
-                    </Border>
-                </Grid>
-
             </Grid>
         </Grid>
     </Border>
