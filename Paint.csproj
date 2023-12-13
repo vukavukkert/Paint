@@ -87,10 +87,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MVVM\View\DrawCanvas.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MVVM\View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -106,9 +102,6 @@
     <Compile Include="MVVM\ViewModel\ApplicationViewModel.cs" />
     <Compile Include="MVVM\View\CreateNewFile.xaml.cs">
       <DependentUpon>CreateNewFile.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="MVVM\View\DrawCanvas.xaml.cs">
-      <DependentUpon>DrawCanvas.xaml</DependentUpon>
     </Compile>
     <Compile Include="MVVM\View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

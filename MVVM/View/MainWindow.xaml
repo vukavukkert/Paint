@@ -11,6 +11,7 @@
         xmlns:uc="clr-namespace:Paint.MVVM.View"
         xmlns:model ="clr-namespace:Paint.MVVM.Model"
         mc:Ignorable="d"
+        MinHeight="510" MinWidth="600"
         Height="700" Width="920"
         WindowStyle="None"
         ResizeMode="CanResizeWithGrip"
@@ -95,7 +96,8 @@
             <Menu Grid.Row="1">
                 <MenuItem Header="File">
                     <MenuItem Header="New File" Command="{Binding NewFile}"/>
-                    <MenuItem Header="Save" Command="{Binding SaveFile}"/>
+                    <MenuItem Header="Open File" Command="{Binding OpenFile}"/>
+                    <MenuItem Header="Save File" Command="{Binding SaveFile}"/>
                     <Separator/>
                     <MenuItem Header="Exit" Command="{Binding CloseWindow}"/>
                 </MenuItem>
@@ -107,8 +109,8 @@
             </Menu>
             <Grid Row="2" >
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="0.60*"/>
-                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition MinWidth="140" Width="0.40*"/>
+                    <ColumnDefinition MinWidth="215" Width="0.60*"/>
                 </Grid.ColumnDefinitions>
                 <Grid Grid.Column="1">
 

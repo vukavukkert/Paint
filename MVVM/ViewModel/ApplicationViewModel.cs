@@ -160,16 +160,32 @@ namespace Paint.MVVM.ViewModel
 
                 void CreateFile (object sender, EventArgs args)
                 {
-                    int width = int.Parse(window.WidthBox.Text);
-                    int height = int.Parse(window.HeightBox.Text);
-                    CurrentDrawingArea.NewFile(width,height);
+
+                    if (int.TryParse(window.WidthBox.Text, out var width)&& int.TryParse(window.HeightBox.Text, out var height))
+                    {
+                        CurrentDrawingArea.NewFile(width,height);
+                        window.CreateButton.Click -= CreateFile;
+                    }
                     window.Close();
-                    window.CreateButton.Click -= CreateFile;
                 };
                 window.CreateButton.Click += CreateFile;
 
             }));
         }
+        #endregion
+
+        #region Open File
+        private RelayCommand _openFile;
+
+        public RelayCommand OpenFile
+        {
+            get { return _openFile ?? (_openFile = new RelayCommand(o =>
+            {
+                CurrentDrawingArea.OpenFile();
+            })); }
+        }
+
+
         #endregion
         #region Undo Stroke
 

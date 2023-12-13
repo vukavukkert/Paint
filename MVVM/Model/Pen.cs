@@ -81,14 +81,14 @@ namespace Paint.MVVM.Model
         }
 
 
-        private double _ActualHeight = 10;
-        private double _ActualWidth = 10;
+        private int _ActualHeight = 10;
+        private int _ActualWidth = 10;
         public double Height
         {
             get { return  _ActualHeight; }
             set
             {
-                _ActualHeight = (double) value;
+                _ActualHeight = (int)value;
                 StrokeSettings.Height = _ActualHeight * Size;
                 OnPropertyChanged("Height");
             }
@@ -99,7 +99,7 @@ namespace Paint.MVVM.Model
             get { return _ActualWidth;}
             set
             {
-                _ActualWidth = (double) value;
+                _ActualWidth = (int)value;
                 StrokeSettings.Width = _ActualWidth * Size;
                 OnPropertyChanged("Width");
             }

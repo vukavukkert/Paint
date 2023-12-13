@@ -16,6 +16,7 @@ using Microsoft.Win32;
 using Paint.Core;
 using System.Windows.Documents;
 using System.Windows.Shapes;
+using Image = System.Windows.Controls.Image;
 
 namespace Paint.MVVM.Model
 {
@@ -31,7 +32,7 @@ namespace Paint.MVVM.Model
 
         private bool handle = true;
         private Border border;
-        private double zoom = 0;
+        private double zoomTotal = 0;
         private Color _currentColor = new Color()
         {
             R = 0,
@@ -112,9 +113,9 @@ namespace Paint.MVVM.Model
         {
             var transform =
                 (ScaleTransform)((TransformGroup)DrawCanvas.RenderTransform).Children.First(c => c is ScaleTransform);
-           zoom = e.Delta > 0 ? .2 : -.2;
-
-            transform.ScaleX += zoom;
+           double zoom = e.Delta > 0 ? .2 : -.2;
+           zoomTotal += zoom;
+           transform.ScaleX += zoom;
             transform.ScaleY += zoom;
             if (transform.ScaleX < 0.2) transform.ScaleX = 0.2;
             if (transform.ScaleY < 0.2) transform.ScaleY = 0.2;
@@ -176,6 +177,20 @@ namespace Paint.MVVM.Model
             translateTransform.Y = origin.Y - v.Y;
         }
 
+        public void OpenFile()
+        {
+            OpenFileDialog openFile = new OpenFileDialog();
+            openFile.Filter = "PNG Files (*.png)|*.png|All files (*.*)|*.*";
+            openFile.DefaultExt = ".png";
+            BitmapImage img;
+            if (openFile.ShowDialog() == true)
+            {
+                img = new BitmapImage(new Uri(openFile.FileName, UriKind.Absolute));
+                NewFile(img.PixelWidth, img.PixelHeight);
+                DrawCanvas.Background = new ImageBrush(img);
+            }
+
+        }
         public void SaveToPng()
         {
             SaveFileDialog saveFile = new SaveFileDialog();
@@ -191,8 +206,6 @@ namespace Paint.MVVM.Model
                     dpi,
                     dpi,
                     PixelFormats.Pbgra32);
-
-
                 
                 // Рендерим InkCanvas на RenderTargetBitmap
                 renderBitmap.Render(DrawCanvas);
@@ -200,7 +213,6 @@ namespace Paint.MVVM.Model
                 // Создаем BitmapEncoder для сохранения изображения в файл
                 PngBitmapEncoder pngEncoder = new PngBitmapEncoder();
                 pngEncoder.Frames.Add(BitmapFrame.Create(renderBitmap));
-
                 
                 // Создаем поток для записи в файл
                 using (FileStream fs = new FileStream(saveFile.FileName, FileMode.Create))
@@ -331,8 +343,8 @@ namespace Paint.MVVM.Model
                 BorderBrush = new SolidColorBrush(Color.Multiply(CurrentColor, 100)),
                 BorderThickness = new Thickness(1),
                 CornerRadius = new CornerRadius(100),
-                Width = Stroke.Width * Stroke.Size ,
-                Height = Stroke.Height * Stroke.Size,
+                Width = Stroke.Width * Stroke.Size + zoomTotal * 4  < 0 ? 0.2 : Stroke.Width * Stroke.Size + zoomTotal* 4,
+                Height = Stroke.Height * Stroke.Size + zoomTotal * 4 < 0 ? 0.2 : Stroke.Height * Stroke.Size + zoomTotal * 4,
                 RenderTransformOrigin = new Point(0,0)
 
             };
@@ -349,8 +361,6 @@ namespace Paint.MVVM.Model
 
             translateTransform.X = e.GetPosition(Container).X - (Container.ActualWidth / 2);
             translateTransform.Y = e.GetPosition(Container).Y - (Container.ActualHeight / 2);
-
-
         }
 
         public void Bind(Grid myGrid)
