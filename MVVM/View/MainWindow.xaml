@@ -331,7 +331,11 @@
                                         </Grid.RowDefinitions>
                                         
                                         <StackPanel>
+                                            <DockPanel>
+                                                <TextBlock HorizontalAlignment="Center" Text="Red"></TextBlock>
                                                 <TextBlock HorizontalAlignment="Center" Text="{Binding Red}"></TextBlock>
+                                            </DockPanel>
+                                          
                                             <Slider Minimum="0" 
                                                     Maximum="255" 
                                                     TickPlacement="BottomRight" 
@@ -340,7 +344,11 @@
                                         </StackPanel>
 
                                         <StackPanel Grid.Row="1">
-                                            <TextBlock HorizontalAlignment="Center" Text="{Binding Blue}"></TextBlock>
+                                            <DockPanel>
+                                                <TextBlock HorizontalAlignment="Center" Text="Blue"></TextBlock>
+                                                <TextBlock HorizontalAlignment="Center" Text="{Binding Blue}"></TextBlock>
+                                            </DockPanel>
+                                               
                                             <Slider Minimum="0" 
                                                     Maximum="255" 
                                                     TickPlacement="BottomRight" 
@@ -349,7 +357,11 @@
                                         </StackPanel>
 
                                         <StackPanel Grid.Row="2">
-                                            <TextBlock HorizontalAlignment="Center" Text="{Binding Green}"></TextBlock>
+                                            <DockPanel>
+                                                <TextBlock HorizontalAlignment="Center" Text="Green"></TextBlock>
+                                                <TextBlock HorizontalAlignment="Center" Text="{Binding Green}"></TextBlock>
+                                            </DockPanel>
+                                                
                                             <Slider Minimum="0" 
                                                     Maximum="255" 
                                                     TickPlacement="BottomRight" 
@@ -357,7 +369,11 @@
                                                     Value="{Binding Green}"/>
                                         </StackPanel>
                                         <StackPanel Grid.Row="3">
-                                            <TextBlock HorizontalAlignment="Center" Text="{Binding Alpha}"></TextBlock>
+                                            <DockPanel>
+                                                <TextBlock HorizontalAlignment="Center" Text="Alpha"></TextBlock>
+                                                <TextBlock HorizontalAlignment="Center" Text="{Binding Alpha}"></TextBlock>
+                                            </DockPanel>
+                                                
                                             <Slider Minimum="0" 
                                                     Maximum="255" 
                                                     TickPlacement="BottomRight" 
